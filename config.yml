@@ -1,0 +1,36 @@
+train:
+  # Name used to identify the run. Data inside `job_dir` will be stored under
+  # `run_name`.
+  run_name: table-area-detection-0.1
+  # Base directory in which model checkpoints & summaries (for Tensorboard) will
+  # be saved.
+  job_dir: jobs/
+  save_checkpoint_secs: 10
+  save_summaries_secs: 10
+
+  # Number of epochs (complete dataset batches) to run.
+  num_epochs: 10
+  # Specify the learning rate schedule to use. These defaults should be good enough.
+  learning_rate:
+    decay_method: piecewise_constant
+    boundaries: [1000000, 1200000]
+    values: [0.0003, 0.0001, 0.00001]
+
+dataset:
+  type: object_detection
+  # From which directory to read the dataset.
+  dir: tfdata/
+  image_preprocessing:
+    min_size: 600
+    max_size: 1024
+  data_augmentation:
+    - flip:
+        left_right: True
+        up_down: True
+        prob: 0.5
+
+model:
+  type: fasterrcnn
+  network:
+    # Total number of classes to predict.
+    num_classes: 1
